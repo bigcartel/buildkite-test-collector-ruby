@@ -44,6 +44,7 @@ module ParallelRSpec
     end
   end
 
+  remove_const(:Client)
   const_set(:Client, NewClient)
 end
 

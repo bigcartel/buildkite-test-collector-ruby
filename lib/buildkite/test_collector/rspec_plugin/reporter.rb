@@ -48,6 +48,10 @@ module Buildkite::TestCollector::RSpecPlugin
       failure_expanded = []
 
       if Buildkite::TestCollector::RSpecPlugin::Reporter::MULTIPLE_ERRORS.include?(notification.exception.class)
+        # Can't figure out why multiple exception errors with ParallelRspec end up sending through a
+        # dumpable proxy class that doesn't work right
+        return "nope", failure_expanded unless notification.exception.respond_to?(:summary)
+
         failure_reason = notification.exception.summary
         notification.exception.all_exceptions.each do |exception|
           # an example with multiple failures doesn't give us a
